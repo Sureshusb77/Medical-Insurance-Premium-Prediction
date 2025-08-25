@@ -26,7 +26,7 @@ This project allows users to estimate insurance costs interactively and easily.
 
 medical_2/
 ├── Main/                   # Source code files
-│   └── app.py              # Main Streamlit application
+│   └── app2.py              # Main Streamlit application
 │
 ├── Data/                   # Dataset files
 │   └── insurance.csv       # Insurance dataset used for model training
@@ -57,4 +57,5 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Run the App
-streamlit run app.py
+streamlit run app2.py
+
