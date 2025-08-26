@@ -1,15 +1,11 @@
 import numpy as np
 import pickle as pkl
 import streamlit as st
-import pandas as pd  # Needed for st.bar_chart
+import pandas as pd 
 
-# Load the trained model
+
 rf_regressor = pkl.load(open('rf_model.pkl', 'rb'))
-
-# --- PAGE CONFIG ---
 st.set_page_config(page_title="Insurance Premium Predictor", page_icon="💰", layout="centered")
-
-# --- CUSTOM CSS ---
 st.markdown("""
     <style>
     /* Background */
@@ -61,11 +57,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- HEADER ---
 st.title("🏥 Medical Insurance Premium Predictor")
 st.markdown("Predict your **Health Insurance Premium** and compare risk factors.")
-
-# --- SIDEBAR ---
 st.sidebar.header("⚙️ Input Parameters")
 
 gender = st.sidebar.selectbox('Choose Gender', ['Female', 'Male'])
@@ -74,25 +67,16 @@ region = st.sidebar.selectbox('Choose Region', ['SouthEast', 'SouthWest', 'North
 age = st.sidebar.slider('Enter Age', 5, 80, 25)
 bmi = st.sidebar.slider('Enter BMI', 5.0, 50.0, 22.0)
 children = st.sidebar.slider('Number of Children', 0, 5, 0)
-
-# --- PREDICTION ---
 if st.button('💡 Predict Premium'):
-    # Encode categorical values
     gender = 0 if gender == 'Female' else 1
     smoker = 1 if smoker == 'Yes' else 0
     region_mapping = {'SouthEast': 0, 'SouthWest': 1, 'NorthEast': 2, 'NorthWest': 3}
     region = region_mapping[region]
 
-    # Create input array
     input_data = np.array([[age, gender, bmi, children, smoker, region]])
-
-    # Prediction
     prediction = rf_regressor.predict(input_data)
-
-    # --- RESULT ---
     st.success(f"💰 Estimated Insurance Premium: **${round(prediction[0], 2)} USD**")
 
-    # Risk level based on premium
     if prediction[0] < 5000:
         st.info("🟢 Risk Level: **Low** (Good health & lifestyle)")
     elif prediction[0] < 15000:
@@ -100,7 +84,6 @@ if st.button('💡 Predict Premium'):
     else:
         st.error("🔴 Risk Level: **High** (Consider lifestyle changes)")
 
-    # --- SMOKER IMPACT COMPARISON ---
     input_data_smoker = np.array([[age, gender, bmi, children, 1, region]])
     input_data_nonsmoker = np.array([[age, gender, bmi, children, 0, region]])
 
@@ -113,17 +96,14 @@ if st.button('💡 Predict Premium'):
     col2.metric("Non-Smoker", f"${round(nonsmoker_pred, 2)}", 
                 f"-${round(smoker_pred - nonsmoker_pred, 2)}")
 
-    # --- PLOT FACTOR IMPACT (Streamlit Chart) ---
     st.markdown("### 📊 Factor Sensitivity Analysis")
     factors = ["Age", "BMI", "Children", "Smoker"]
     impacts = [age*200, bmi*150, children*500, (smoker*10000)]
 
     impact_df = pd.DataFrame({"Factor": factors, "Impact": impacts})
     impact_df = impact_df.set_index("Factor")
-
     st.bar_chart(impact_df)
 
-    # --- ADD INSURANCE TIPS ---
     st.markdown("### 💡 Health & Insurance Tips")
     st.write("- Maintain a healthy **BMI** to reduce long-term premiums.")
     st.write("- Avoid **smoking** – it heavily increases your insurance cost.")
