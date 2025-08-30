@@ -14,8 +14,6 @@ st.markdown("""
         color: #1e293b;
         font-family: 'Segoe UI', sans-serif;
     }
-
-    /* Sidebar */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #1e40af, #1d4ed8);
         color: white;
@@ -24,12 +22,9 @@ st.markdown("""
         color: white !important;
     }
 
-    /* Titles */
     h1, h2, h3 {
         color: #1e3a8a !important;
     }
-
-    /* Success / Warning / Error boxes */
     .stSuccess {
         background-color: #dcfce7 !important;
         border: 1px solid #22c55e;
@@ -48,8 +43,6 @@ st.markdown("""
         border-radius: 10px;
         padding: 10px;
     }
-
-    /* Metrics */
     [data-testid="stMetricValue"] {
         color: #1e3a8a;
         font-weight: bold;
